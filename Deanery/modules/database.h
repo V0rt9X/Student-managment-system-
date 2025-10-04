@@ -1,0 +1,4 @@
+#ifndef FINALPROJECT_DATABASE_H
+#define FINALPROJECT_DATABASE_H
+
+#endif

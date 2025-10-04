@@ -1,0 +1,10 @@
+.idea/
+cmake-build-debug*/
+*.o
+*.obj
+*.exe
+*.log
+*.iml
+*.env
+
+.DS_Store
