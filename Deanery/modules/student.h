@@ -20,10 +20,12 @@ typedef struct {
     contactInfo correspondence;
 } student;
 
-
 //The function takes student data and allocates a new struct element on the heap. Function is encrypting user password with Caesar cipher.
 student* createStudent(int id, const char* name, const char* surname, grade gradeOfStudent, const char* password,
                        contactType conType,const char* correspondence);
+
+// Function of printing student data.
+void printStudent(student* s);
 
 #endif
 

@@ -52,3 +52,41 @@ student* createStudent(int id, const char* name, const char* surname, grade grad
     return s;
 }
 
+// Function off converting decimal digit to binary digit.
+static void decBin(char *buffer,size_t size,int dig) {
+    memset(buffer,48,size); buffer[size-1]='\0'; // Setting buffer by char 0
+    for (int i = (int)size-2; i >= 1; i--) {
+        if (dig == 0) {break;}
+        buffer[i] = (char)((dig % 2) + 48);
+        dig /= 2;
+    }
+}
+
+void printStudent(student* s) {
+    if (s==NULL) {
+        printf("Empty struct.\n");
+        return;
+    }
+
+    printf("Name Surname: %s\t", s->name);
+    printf("%s. ", s->surname);
+    printf("Grade: %d. ", s->gradeOfStudent);
+
+    if (s->contactOfStudent == EMAIL) {
+        printf("Correspondence: %s. ", s->correspondence.eMail);
+    } else if (s->contactOfStudent == PHONE) {
+        printf("Correspondence: %s. ", s->correspondence.phone);
+    } else {
+        printf("Address of correspondence wasn't added.\n");
+    }
+
+    printf("Student ID: %d. ", s->id);
+    printf("Student ID in octal system: %o. ", s->id);
+    printf("Student ID in hexadecimal system: %x.\n", s->id);
+
+
+    char buffer[33]; // buffer for 32 bit binary ID
+    decBin(buffer,33,s->id);
+    printf("Student ID in binary system: %s\n", buffer);
+}
+
