@@ -62,31 +62,31 @@ static void decBin(char *buffer,size_t size,int dig) {
     }
 }
 
-void printStudent(student* s) {
-    if (s==NULL) {
+void printStudent(student* data) {
+    if (data==NULL) {
         printf("Empty struct.\n");
         return;
     }
 
-    printf("Name Surname: %s\t", s->name);
-    printf("%s. ", s->surname);
-    printf("Grade: %d. ", s->gradeOfStudent);
+    printf("Name Surname: %s\t", data->name);
+    printf("%s. ", data->surname);
+    printf("Grade: %d. ", data->gradeOfStudent);
 
-    if (s->contactOfStudent == EMAIL) {
-        printf("Correspondence: %s. ", s->correspondence.eMail);
-    } else if (s->contactOfStudent == PHONE) {
-        printf("Correspondence: %s. ", s->correspondence.phone);
+    if (data->contactOfStudent == EMAIL) {
+        printf("Correspondence: %s. ", data->correspondence.eMail);
+    } else if (data->contactOfStudent == PHONE) {
+        printf("Correspondence: %s. ", data->correspondence.phone);
     } else {
         printf("Address of correspondence wasn't added.\n");
     }
 
-    printf("Student ID: %d. ", s->id);
-    printf("Student ID in octal system: %o. ", s->id);
-    printf("Student ID in hexadecimal system: %x.\n", s->id);
+    printf("Student ID: %d. ", data->id);
+    printf("Student ID in octal system: %o. ", data->id);
+    printf("Student ID in hexadecimal system: %x.\n", data->id);
 
 
     char buffer[33]; // buffer for 32 bit binary ID
-    decBin(buffer,33,s->id);
+    decBin(buffer,33,data->id);
     printf("Student ID in binary system: %s\n", buffer);
 }
 
