@@ -1,15 +1,16 @@
 #ifndef FINALPROJECT_DATABASE_H
 #define FINALPROJECT_DATABASE_H
 #include <stdio.h>
+#include "student.h"
 
 // Structure for storing student data in a chain of structures.
 typedef struct Node {
-    struct s *data;
+    student *data;
     struct Node *next;
 }Node;
 
-//Function adds an element to the end of a linked list.
-int student_add(Node* head);
+//Function adds an element to the end of a linked list, and returns true if everything is successful, -1 if an error occurred while allocating memory.
+int student_add(student* data, Node* element);
 
 //Function prints the student data from the chain element.
 void student_print(Node* head);
