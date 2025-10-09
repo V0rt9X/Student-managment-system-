@@ -5,8 +5,8 @@ set(CMAKE_C_STANDARD 23)
 
 include_directories(${PROJECT_SOURCE_DIR}/modules)
 
-add_executable(test
-        ${PROJECT_SOURCE_DIR}/test.c
+add_executable(main
+        ${PROJECT_SOURCE_DIR}/main.c
         ${PROJECT_SOURCE_DIR}/modules/student.c
         ${PROJECT_SOURCE_DIR}/modules/database.c
 )

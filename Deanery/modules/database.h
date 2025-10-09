@@ -12,8 +12,8 @@ typedef struct Node {
 //Function adds an element to the end of a linked list, and returns true if everything is successful, -1 if an error occurred while allocating memory.
 int student_add(student* data, Node** element);
 
-//Function prints the student data from the chain element.
-void student_print(const Node* element);
+//Function prints the student data from the linked list.
+void print_list(Node* head);
 
 //Function finds a student by id in a linked list.
 Node* find_student_by_id(Node* head, int id);
@@ -28,6 +28,6 @@ int save_to_file(Node* head);
 int load_from_file(Node* head, FILE* fname);
 
 //Function frees memory from the linked list.
-void free_list(Node** head);
+int free_list(Node** head);
 
 #endif

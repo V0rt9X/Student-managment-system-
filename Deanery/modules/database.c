@@ -32,14 +32,26 @@ int student_add(student* data, Node** element) {
     return 1;
 }
 
-void student_print(const Node *element) {
+void print_list(Node *element) {
     if (element == NULL) {
         printf("Empty element.\n");
         return;
     }
+    //Temporary pointer for traversing a linked list
+    Node* current = element;
+    //Loop to traversing a linked list
+    while (current != NULL) {
+        if (current->data == NULL) {
+            printf("Empty element.");
+            current = current->next;
+            continue;
+        }
+        //Passing a block of data to the data output function
+        printStudent(current->data);
+        printf("\n");
+        current = current->next;
+    }
 
-    //Passing a block of data to the data output function
-    printStudent(element->data);
 }
 
 Node* find_student_by_id(Node* head, int id) {
@@ -58,3 +70,19 @@ Node* find_student_by_id(Node* head, int id) {
     return NULL;
 }
 
+int free_list(Node** head) {
+    int counter=0;
+    Node* current = *head;
+    Node* next=NULL;
+
+    //Loop for traversing a linked list and free it via a temporary pointer
+    while (current!=NULL) {
+        next = current->next;
+        free(current->data);
+        free(current);
+        current = next;
+        counter++;
+    }
+
+    return counter;
+}
