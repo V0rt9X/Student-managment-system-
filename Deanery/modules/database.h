@@ -19,7 +19,7 @@ void print_list(Node* head);
 Node* find_student_by_id(Node* head, int id);
 
 //Function removes student by id from linked list.
-int delete_student_by_id(Node* head, unsigned id);
+int delete_student_by_id(Node** head, int id);
 
 //Function saves a linked list to a file.
 int save_to_file(Node* head);

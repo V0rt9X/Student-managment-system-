@@ -73,7 +73,7 @@ Node* find_student_by_id(Node* head, int id) {
 int free_list(Node** head) {
     int counter=0;
     Node* current = *head;
-    Node* next=NULL;
+    Node* next;
 
     //Loop for traversing a linked list and free it via a temporary pointer
     while (current!=NULL) {
@@ -84,5 +84,46 @@ int free_list(Node** head) {
         counter++;
     }
 
+    *head = NULL;
+
     return counter;
 }
+
+int delete_student_by_id(Node** head, int id) {
+    if ((*head) == NULL) {
+        printf("Empty list.\n");
+        return 0;
+    }
+
+    //Loop to find the element to be removed
+    Node* current = *head;
+    Node* prev;
+    while (current != NULL) {
+        if (current->data->id == id) {
+            break;
+        }
+        prev = current;
+        current = current->next;
+    }
+
+    //Check for element detection
+    if (current == NULL) {
+        printf("Student with %d ID not found.\n", id);
+        return 0;
+    }
+
+    //Checking if an element is the first
+    if (current == *head) {
+        *head = current->next;
+        free(current->data);
+        free(current);
+        return 1;
+    }
+
+    //Joining a linked list and deleting the found element
+    prev->next = current->next;
+    free(current->data);
+    free(current);
+    return 1;
+}
+
