@@ -16,7 +16,7 @@ int student_add(student* data, Node** element);
 void student_print(const Node* element);
 
 //Function finds a student by id in a linked list.
-Node* find_student_by_id(Node* head, unsigned id);
+Node* find_student_by_id(Node* head, int id);
 
 //Function removes student by id from linked list.
 int delete_student_by_id(Node* head, unsigned id);

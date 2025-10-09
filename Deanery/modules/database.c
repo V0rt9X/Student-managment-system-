@@ -41,3 +41,20 @@ void student_print(const Node *element) {
     //Passing a block of data to the data output function
     printStudent(element->data);
 }
+
+Node* find_student_by_id(Node* head, int id) {
+    //Temporary pointer for traversing a linked list
+    Node* current = head;
+
+    //Loop to find the target element
+    while (current != NULL) {
+        if (current->data->id == id) {
+            return current;
+        }
+        current = current->next;
+    }
+
+    printf("Student with %d ID not found.\n", id);
+    return NULL;
+}
+
