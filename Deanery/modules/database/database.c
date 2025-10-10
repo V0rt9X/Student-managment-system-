@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "database.h"
-#include "student.h"
+#include "../student/student.h"
 
 #define MALLOC_FAILE (-1)
 
