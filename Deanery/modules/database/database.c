@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include "database.h"
 #include "../student/student.h"
-
+#include "../../utilities/utils/utils.h"
 #define MALLOC_FAILE (-1)
+#define EMPTY_LIST_ERROR (-1)
 
 int student_add(student* data, Node** element) {
     Node* new_element = (Node*)malloc(sizeof(Node)); //Creating a target element
@@ -108,7 +109,7 @@ int delete_student_by_id(Node** head, int id) {
 
     //Check for element detection
     if (current == NULL) {
-        printf("Student with %d ID not found.\n", id);
+        printf("Student with %d ID not found.\n\n", id);
         return 0;
     }
 
@@ -124,6 +125,48 @@ int delete_student_by_id(Node** head, int id) {
     prev->next = current->next;
     free(current->data);
     free(current);
+    return 1;
+}
+
+int save_to_file(Node* head) {
+    if (head == NULL) {
+        perror("Empty list.\n\n");
+        return EMPTY_LIST_ERROR;
+    }
+
+    FILE* database = fopen("/Users/vortexskyshaker/CLionProjects/FinalProject/Deanery/modules/database/database.txt", "w");
+    if (database == NULL) {
+        perror("Error writing to file.\n");
+        return OPEN_FILE_ERROR;
+    }
+
+    Node* current = head;
+    while (current != NULL) {
+        fprintf(database, "%d,", current->data->id);
+        fprintf(database, "%s,", current->data->name);
+        fprintf(database, "%s,", current->data->surname);
+        fprintf(database, "%c,", current->data->gradeOfStudent + 'A');
+        fprintf(database, "%s,", current->data->password);
+
+        switch (current->data->contactOfStudent) {
+            case PHONE:
+                fprintf(database, "PHONE,");
+                fprintf(database, "%s", current->data->correspondence.phone);
+                break;
+            case EMAIL:
+                fprintf(database, "EMAIL,");
+                fprintf(database, "%s,", current->data->correspondence.eMail);
+                break;
+            default:
+                fprintf(database, "NONE");
+                break;
+        }
+
+        fprintf(database, "\n");
+        current = current->next;
+    }
+
+    fclose(database);
     return 1;
 }
 

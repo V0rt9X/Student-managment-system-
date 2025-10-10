@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "database/database.h"
 
 // Function of Ceasar cipher.
 static void ceasarEnc(char buffer[],size_t size,const char* str) {
@@ -70,7 +71,7 @@ void printStudent(student* data) {
 
     printf("Name Surname: %s\t", data->name);
     printf("%s. ", data->surname);
-    printf("Grade: %d. ", data->gradeOfStudent);
+    printf("Grade: %c. ", data->gradeOfStudent + 65);
 
     if (data->contactOfStudent == EMAIL) {
         printf("Correspondence: %s. ", data->correspondence.eMail);
@@ -89,4 +90,3 @@ void printStudent(student* data) {
     decBin(buffer,33,data->id);
     printf("Student ID in binary system: %s\n", buffer);
 }
-

@@ -9,4 +9,5 @@ add_executable(main
         ${PROJECT_SOURCE_DIR}/main.c
         modules/student/student.c
         modules/database/database.c
+        utilities/utils/utils.c
 )

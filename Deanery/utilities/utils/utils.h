@@ -1,4 +1,6 @@
 #ifndef FINALPROJECT_UTILS_H
 #define FINALPROJECT_UTILS_H
 
+#define OPEN_FILE_ERROR (-1)
+
 #endif

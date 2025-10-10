@@ -1,7 +1,7 @@
 #ifndef FINALPROJECT_STUDENT_H
 #define FINALPROJECT_STUDENT_H
 
-typedef enum { F=1,D,C,B,A } grade;
+typedef enum { A,B,C,D,E } grade;
 
 typedef enum { NONE=0, PHONE ,EMAIL } contactType;
 
