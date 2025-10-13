@@ -25,7 +25,7 @@ int delete_student_by_id(Node** head, int id);
 int save_to_file(Node* head);
 
 //Function unloads student data from a file into a linked list.
-int load_from_file(Node* head, FILE* fname);
+int load_from_file(Node** head);
 
 //Function frees memory from the linked list.
 int free_list(Node** head);

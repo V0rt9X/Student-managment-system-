@@ -1,12 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
+#include <string.h>
 #include "database.h"
 #include "../student/student.h"
 #include "../../utilities/utils/utils.h"
-#define MALLOC_FAILE (-1)
-#define EMPTY_LIST_ERROR (-1)
+#define MALLOC_FAILE (-1) // for student_add
+#define EMPTY_DATA_ERROR (-2)// for student_add
+
+#define EMPTY_LIST_ERROR (-1) // for save_to_file
+
+#define LIST_ERROR (-3) // for load_from_file
+#define ERROR_DATABASE_DATA (-4) // for load_from_file
+#define ADD_ERROR (-5) // for load_from_file
 
 int student_add(student* data, Node** element) {
+    // Checking data for NULL
+    if (data == NULL) {
+        return EMPTY_DATA_ERROR;
+    }
+
     Node* new_element = (Node*)malloc(sizeof(Node)); //Creating a target element
     if (new_element == NULL) {
         return MALLOC_FAILE;
@@ -134,12 +147,14 @@ int save_to_file(Node* head) {
         return EMPTY_LIST_ERROR;
     }
 
+    //Opening the file and checking
     FILE* database = fopen("/Users/vortexskyshaker/CLionProjects/FinalProject/Deanery/modules/database/database.txt", "w");
     if (database == NULL) {
         perror("Error writing to file.\n");
         return OPEN_FILE_ERROR;
     }
 
+    //Cycle for writing data
     Node* current = head;
     while (current != NULL) {
         fprintf(database, "%d,", current->data->id);
@@ -166,7 +181,165 @@ int save_to_file(Node* head) {
         current = current->next;
     }
 
+    //Closing a file
     fclose(database);
     return 1;
+}
+
+int load_from_file(Node** head) {
+    // Checking if a linked list is empty
+    if ((*head) != NULL) {
+        printf("Header pointer must be NULL.\n");
+        return LIST_ERROR;
+    }
+
+    // Opening and checking if a file is open
+    FILE* database = fopen("/Users/vortexskyshaker/CLionProjects/FinalProject/Deanery/modules/database/database.txt", "r");
+    if (database == NULL) {
+        perror("Error reading file.\n");
+        return OPEN_FILE_ERROR;
+    }
+
+    //Declaring a variable to count the number of students read in a loop
+    int read_counter = 0;
+    while (1) {
+        //Reading student data into the buffer
+        int character;
+        char buffer[1024]; memset(buffer, 0, sizeof(buffer));
+        for (int i=0; i < sizeof(buffer)-2; i++) {
+            if ((character = fgetc(database)) == '\n' || character == EOF) {
+                break;
+            }
+            buffer[i] = (char)character;
+        } buffer[sizeof(buffer)-1] = '\0';
+
+        // Checking the length of the read string
+        if (character != '\n' && character != EOF) {
+            fclose(database);
+            return ERROR_DATABASE_DATA;
+        }
+
+        //Сhecking for correct string format
+        unsigned delim_counter=0;
+        for (int i=0; buffer[i]!='\0'; i++) {
+            if (buffer[i] == ',') {delim_counter++;}
+        }
+        if (delim_counter < 5 || delim_counter > 6) {
+            fclose(database);
+            perror("Error count delimiters in file.");
+            return ERROR_DATABASE_DATA;
+        }
+
+        // Declaration of parameters required for parsing
+        char *savertok;
+        char *delimiter = ",";
+        char *toldelim;
+
+        //Start parsing the buffer
+        char* token = strtok_r(buffer, delimiter,&savertok);
+        if (!token) {fclose(database); return PARSING_ERROR;}
+        long dig = strtol(token, &toldelim, 10);
+
+        //Сhecking the read id
+        int id;
+        if (dig <= 0 || dig > INT_MAX) {
+            fclose(database);
+            return ERROR_DATABASE_DATA;
+        }else {
+            id = (int)dig;
+        }
+
+        //Reading and checking the reading of the name
+        char name[sizeof(((student*)0)->name)];
+        token = strtok_r(NULL, delimiter, &savertok);
+        if (!token) {fclose(database); return PARSING_ERROR;}
+        snprintf(name, sizeof(name), "%s", token);
+
+        //Reading and checking the reading of the surname
+        char surname[sizeof(((student*)0)->surname)];
+        token = strtok_r(NULL, delimiter,&savertok);
+        if (!token) {fclose(database); return PARSING_ERROR;}
+        snprintf(surname, sizeof(surname), "%s", token);
+
+        //Reading and checking the reading of the grade
+        grade grade;
+        token = strtok_r(NULL, delimiter,&savertok);
+        if (!token) {fclose(database); return PARSING_ERROR;}
+        dig = strtol(token, &toldelim, 10);
+
+        //Valuation range check
+        if (dig < 0 || dig > 4) {
+            grade = WITHOUT_GRADE;
+        }else {
+            grade = dig;
+        }
+
+        //Reading and checking password reading
+        char password[sizeof(((student*)0)->password)];
+        token = strtok_r(NULL, delimiter,&savertok);
+        if (!token) {fclose(database); return PARSING_ERROR;}
+        snprintf(password, sizeof(password), "%s", token);
+
+
+        //Reading the type and data of correspondence and checking the reading
+        char email[sizeof(((contactInfo*)0)->eMail)];
+        char phone[sizeof(((contactInfo*)0)->phone)];
+        contactType type;
+        token = strtok_r(NULL, delimiter,&savertok);
+        if (!token) {fclose(database); return PARSING_ERROR;}
+        if (strcmp(token,"EMAIL") == 0) {
+            type = EMAIL;
+            token = strtok_r(NULL, delimiter,&savertok);
+            if (!token) {fclose(database); return PARSING_ERROR;}
+            snprintf(email, sizeof(email), "%s", token);
+        }else if (strcmp(token,"PHONE") == 0) {
+            type = PHONE;
+            token = strtok_r(NULL, delimiter,&savertok);
+            if (!token) {fclose(database); return PARSING_ERROR;}
+            snprintf(phone, sizeof(phone), "%s", token);
+        }else {
+            type = NONE;
+        }
+
+        //(switch case) To call a function with the correct parameters
+        int validator;
+        switch (type) {
+            case EMAIL:
+                validator = student_add(createStudent(id, name, surname, grade, password, type, email),head);
+                if (validator != 1) {
+                    fclose(database);
+                    perror("Error in adding student while reading file.");
+                    return ADD_ERROR;
+                }
+                break;
+            case PHONE:
+                validator = student_add(createStudent(id, name, surname, grade, password, type, phone),head);
+                if (validator != 1) {
+                    fclose(database);
+                    perror("Error in adding student while reading file.");
+                    return ADD_ERROR;
+                }
+                break;
+            default:
+                validator = student_add(createStudent(id, name, surname, grade, password, type, ""),head);
+                if (validator != 1) {
+                    fclose(database);
+                    perror("Error in adding student while reading file.");
+                    return ADD_ERROR;
+                }
+                break;
+        }
+
+        //EOF check
+        if ((character = fgetc(database)) == EOF) {
+            break;
+        }else {
+            ungetc(character,database);
+        }
+        read_counter++;
+    }
+
+    fclose(database);
+    return read_counter;
 }
 

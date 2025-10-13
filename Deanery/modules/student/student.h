@@ -1,9 +1,9 @@
 #ifndef FINALPROJECT_STUDENT_H
 #define FINALPROJECT_STUDENT_H
 
-typedef enum { A,B,C,D,E } grade;
+typedef enum { A,B,C,D,E,WITHOUT_GRADE } grade;
 
-typedef enum { NONE=0, PHONE ,EMAIL } contactType;
+typedef enum { NONE, PHONE, EMAIL } contactType;
 
 typedef union {
     char eMail[50];
