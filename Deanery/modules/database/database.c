@@ -170,7 +170,7 @@ int save_to_file(Node* head) {
                 break;
             case EMAIL:
                 fprintf(database, "EMAIL,");
-                fprintf(database, "%s,", current->data->correspondence.eMail);
+                fprintf(database, "%s", current->data->correspondence.eMail);
                 break;
             default:
                 fprintf(database, "NONE");
