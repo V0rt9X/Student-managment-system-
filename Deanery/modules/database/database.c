@@ -3,7 +3,6 @@
 #include <limits.h>
 #include <string.h>
 #include "database.h"
-#include "../student/student.h"
 #include "../../utilities/utils/utils.h"
 #define MALLOC_FAILE (-1) // for student_add
 #define EMPTY_DATA_ERROR (-2)// for student_add

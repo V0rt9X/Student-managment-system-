@@ -1,6 +1,5 @@
 #ifndef FINALPROJECT_DATABASE_H
 #define FINALPROJECT_DATABASE_H
-#include <stdio.h>
 #include "../student/student.h"
 
 // Structure for storing student data in a chain of structures.
