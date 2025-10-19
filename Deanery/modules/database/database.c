@@ -264,10 +264,10 @@ int load_from_file(Node** head) {
         grade grade;
         token = strtok_r(NULL, delimiter,&savertok);
         if (!token) {fclose(database); return PARSING_ERROR;}
-        dig = strtol(token, &toldelim, 10);
+        dig = token[0] - 'A' + 1;
 
         //Valuation range check
-        if (dig < 0 || dig > 4) {
+        if (dig < 1 || dig > 4) {
             grade = WITHOUT_GRADE;
         }else {
             grade = dig;

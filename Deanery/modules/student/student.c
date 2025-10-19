@@ -18,7 +18,7 @@ static void ceasarEnc(char buffer[],size_t size,const char* str) {
 }
 
 student* createStudent(int id, const char* name, const char* surname, grade gradeOfStudent, const char* password,
-                       contactType conType,const char* correspondence) {
+    contactType conType, const char* correspondence) {
 
     // Allocating memory for structure "student"
     student *s = (student*)malloc(sizeof(student));
@@ -71,7 +71,7 @@ void printStudent(student* data) {
 
     printf("Name Surname: %s\t", data->name);
     printf("%s. ", data->surname);
-    printf("Grade: %c. ", data->gradeOfStudent + 65);
+    printf("Grade: %c. ", data->gradeOfStudent + 65 - 1);
 
     if (data->contactOfStudent == EMAIL) {
         printf("Correspondence: %s. ", data->correspondence.eMail);
@@ -89,4 +89,5 @@ void printStudent(student* data) {
     char buffer[33]; // buffer for 32 bit binary ID
     decBin(buffer,33,data->id);
     printf("Student ID in binary system: %s\n", buffer);
+    printf("\n");
 }
