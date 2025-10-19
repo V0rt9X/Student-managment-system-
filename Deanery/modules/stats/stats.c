@@ -27,7 +27,28 @@ void find_student_with_best_grade(Node* head) {
         }
         current= current->next;
     }
+}
+
+//Static function for finding middle element in a linked array
+static Node* find_middle(Node* head) {
+    if (!head) {
+        return head;
+    }
+
+    Node* slow = head;
+    Node* fast = head->next;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow;
+}
+
+static Node* merge() {
 
 }
 
+void sort_student_by_surname(Node **head) {
 
+}
