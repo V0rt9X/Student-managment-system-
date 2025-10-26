@@ -1,5 +1,6 @@
 #include "stats.h"
 #include <stdio.h>
+#include <string.h>
 
 
 void find_student_with_best_grade(Node* head) {
@@ -45,10 +46,45 @@ static Node* find_middle(Node* head) {
     return slow;
 }
 
-static Node* merge() {
+//The function merges two already sorted lists (left and right) into one new, completely sorted list.
+static Node* merge(Node* left, Node* right) {
+    Node dummy;
+    Node* current = &dummy;
+    dummy.next = NULL;
 
+    while (left && right) {
+        if (strcmp(left->data->surname, right->data->surname) <= 0) {
+            current->next = left;
+            left = left->next;
+        }else {
+            current->next = right;
+            right = right->next;
+        }
+        current = current->next;
+    }
+
+    if (left) {
+        current->next = left;
+    }
+    if (right) {
+        current->next = right;
+    }
+
+    return dummy.next;
 }
 
-void sort_student_by_surname(Node **head) {
+Node* sort_student_by_surname(Node *head) {
+    if (!head || !(head->next)) {
+        return head;
+    }
 
+    Node* middle = find_middle(head);
+
+    Node* right = middle->next;
+    middle->next = NULL;
+
+    Node* sortLeft = sort_student_by_surname(head);
+    Node* sortRight = sort_student_by_surname(right);
+
+    return merge(sortLeft, sortRight);
 }
