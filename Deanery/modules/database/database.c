@@ -4,14 +4,8 @@
 #include <string.h>
 #include "database.h"
 #include "../../utilities/utils/utils.h"
-#define MALLOC_FAILE (-1) // for student_add
-#define EMPTY_DATA_ERROR (-2)// for student_add
 
-#define EMPTY_LIST_ERROR (-1) // for save_to_file
 
-#define LIST_ERROR (-3) // for load_from_file
-#define ERROR_DATABASE_DATA (-4) // for load_from_file
-#define ADD_ERROR (-5) // for load_from_file
 
 int student_add(student* data, Node** element) {
     // Checking data for NULL
@@ -47,7 +41,6 @@ int student_add(student* data, Node** element) {
 
 void print_list(Node *element) {
     if (element == NULL) {
-        printf("Empty element.\n");
         return;
     }
     //Temporary pointer for traversing a linked list
@@ -67,14 +60,14 @@ void print_list(Node *element) {
 
 }
 
-Node* find_student_by_id(Node* head, int id) {
+student* find_student_by_id(Node* head, int id) {
     //Temporary pointer for traversing a linked list
     Node* current = head;
 
     //Loop to find the target element
     while (current != NULL) {
         if (current->data->id == id) {
-            return current;
+            return current->data;
         }
         current = current->next;
     }
@@ -105,7 +98,7 @@ int free_list(Node** head) {
 int delete_student_by_id(Node** head, int id) {
     if ((*head) == NULL) {
         printf("Empty list.\n");
-        return 0;
+        return EMPTY_LIST_ERROR;
     }
 
     //Loop to find the element to be removed
@@ -142,14 +135,13 @@ int delete_student_by_id(Node** head, int id) {
 
 int save_to_file(Node* head) {
     if (head == NULL) {
-        perror("Empty list.\n\n");
+        printf("Empty list.\n");
         return EMPTY_LIST_ERROR;
     }
 
     //Opening the file and checking
     FILE* database = fopen("/Users/vortexskyshaker/CLionProjects/FinalProject/Deanery/modules/database/database.txt", "w");
     if (database == NULL) {
-        perror("Error writing to file.\n");
         return OPEN_FILE_ERROR;
     }
 
@@ -159,7 +151,12 @@ int save_to_file(Node* head) {
         fprintf(database, "%d,", current->data->id);
         fprintf(database, "%s,", current->data->name);
         fprintf(database, "%s,", current->data->surname);
-        fprintf(database, "%c,", current->data->gradeOfStudent + 'A');
+        grade grade = current->data->gradeOfStudent;
+        if (grade < 1 || grade > 5) {
+            fprintf(database, "WITHOUT_GRADE,");
+        }else {
+            fprintf(database, "%c,", current->data->gradeOfStudent + '@');
+        }
         fprintf(database, "%s,", current->data->password);
 
         switch (current->data->contactOfStudent) {
@@ -195,7 +192,6 @@ int load_from_file(Node** head) {
     // Opening and checking if a file is open
     FILE* database = fopen("/Users/vortexskyshaker/CLionProjects/FinalProject/Deanery/modules/database/database.txt", "r");
     if (database == NULL) {
-        perror("Error reading file.\n");
         return OPEN_FILE_ERROR;
     }
 
@@ -225,7 +221,6 @@ int load_from_file(Node** head) {
         }
         if (delim_counter < 5 || delim_counter > 6) {
             fclose(database);
-            perror("Error count delimiters in file.");
             return ERROR_DATABASE_DATA;
         }
 
@@ -267,7 +262,7 @@ int load_from_file(Node** head) {
         dig = token[0] - 'A' + 1;
 
         //Valuation range check
-        if (dig < 1 || dig > 4) {
+        if (dig < 1 || dig > 5) {
             grade = WITHOUT_GRADE;
         }else {
             grade = dig;
@@ -304,26 +299,23 @@ int load_from_file(Node** head) {
         int validator;
         switch (type) {
             case EMAIL:
-                validator = student_add(createStudent(id, name, surname, grade, password, type, email),head);
+                validator = student_add(createStudent(id, name, surname, grade, password, type, email,1),head);
                 if (validator != 1) {
                     fclose(database);
-                    perror("Error in adding student while reading file.");
                     return ADD_ERROR;
                 }
                 break;
             case PHONE:
-                validator = student_add(createStudent(id, name, surname, grade, password, type, phone),head);
+                validator = student_add(createStudent(id, name, surname, grade, password, type, phone,1),head);
                 if (validator != 1) {
                     fclose(database);
-                    perror("Error in adding student while reading file.");
                     return ADD_ERROR;
                 }
                 break;
             default:
-                validator = student_add(createStudent(id, name, surname, grade, password, type, ""),head);
+                validator = student_add(createStudent(id, name, surname, grade, password, type, "",1),head);
                 if (validator != 1) {
                     fclose(database);
-                    perror("Error in adding student while reading file.");
                     return ADD_ERROR;
                 }
                 break;
@@ -331,6 +323,7 @@ int load_from_file(Node** head) {
 
         //EOF check
         if ((character = fgetc(database)) == EOF) {
+            read_counter++;
             break;
         }else {
             ungetc(character,database);

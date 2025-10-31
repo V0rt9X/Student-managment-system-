@@ -1,14 +1,17 @@
 #include "stats.h"
+#include "database.h"
 #include <stdio.h>
 #include <string.h>
 
 
-void find_student_with_best_grade(Node* head) {
+int find_student_with_best_grade(Node* head) {
     //Checking head pointer for NULL
     if (!head) {
         printf("Empty list\n");
-        return;
+        return EMPTY_LIST_ERROR;
     }
+
+    int counter = 0;
 
     //Loop to find the best grade in a linked list
     Node* current = head;
@@ -27,7 +30,9 @@ void find_student_with_best_grade(Node* head) {
             printStudent(current->data);
         }
         current= current->next;
+        counter++;
     }
+    return counter;
 }
 
 //Static function for finding middle element in a linked array

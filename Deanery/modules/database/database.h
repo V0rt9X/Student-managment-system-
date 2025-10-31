@@ -2,6 +2,15 @@
 #define FINALPROJECT_DATABASE_H
 #include "../student/student.h"
 
+#define MALLOC_FAILE (-1) // for student_add
+#define EMPTY_DATA_ERROR (-2)// for student_add
+
+#define EMPTY_LIST_ERROR (-1) // for save_to_file
+
+#define LIST_ERROR (-1) // for load_from_file
+#define ERROR_DATABASE_DATA (-2) // for load_from_file
+#define ADD_ERROR (-3) // for load_from_file
+
 // Structure for storing student data in a chain of structures.
 typedef struct Node {
     student *data;
@@ -15,7 +24,7 @@ int student_add(student* data, Node** element);
 void print_list(Node* head);
 
 //Function finds a student by id in a linked list.
-Node* find_student_by_id(Node* head, int id);
+student* find_student_by_id(Node* head, int id);
 
 //Function removes student by id from linked list.
 int delete_student_by_id(Node** head, int id);

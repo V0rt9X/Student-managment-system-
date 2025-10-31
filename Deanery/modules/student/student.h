@@ -1,15 +1,19 @@
 #ifndef FINALPROJECT_STUDENT_H
 #define FINALPROJECT_STUDENT_H
 
+//Enum for storing the evaluation type
 typedef enum { WITHOUT_GRADE,A,B,C,D,E } grade;
 
+//Enum for storing the correspondence type
 typedef enum { NONE, PHONE, EMAIL } contactType;
 
+//Union for storing correspondence data
 typedef union {
     char eMail[50];
     char phone[20];
 } contactInfo;
 
+//Structure for storing student data
 typedef struct {
     int id;
     char name[50];
@@ -22,7 +26,7 @@ typedef struct {
 
 //The function takes student data and allocates a new struct element on the heap. Function is encrypting user password with Caesar cipher.
 student* createStudent(int id, const char* name, const char* surname, grade gradeOfStudent, const char* password,
-                       contactType conType,const char* correspondence);
+                       contactType conType,const char* correspondence,unsigned passwdFlag);
 
 // Function of printing student data.
 void printStudent(student* s);

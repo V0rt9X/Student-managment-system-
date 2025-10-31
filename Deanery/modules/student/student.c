@@ -18,7 +18,7 @@ static void ceasarEnc(char buffer[],size_t size,const char* str) {
 }
 
 student* createStudent(int id, const char* name, const char* surname, grade gradeOfStudent, const char* password,
-    contactType conType, const char* correspondence) {
+    contactType conType, const char* correspondence,unsigned passwdFlag) {
 
     // Allocating memory for structure "student"
     student *s = (student*)malloc(sizeof(student));
@@ -30,9 +30,17 @@ student* createStudent(int id, const char* name, const char* surname, grade grad
     // Ceasar cipher for encryption user password
     size_t bufferSize = sizeof(s->password);
     char buffer[bufferSize];
-    ceasarEnc(buffer,bufferSize,password);
+    if (passwdFlag == 0) {
+        ceasarEnc(buffer,bufferSize,password);
+    }else {
+        snprintf(buffer, bufferSize, "%s", password);
+    }
 
 
+    if (id<1) {
+        free(s);
+        return NULL;
+    }
     // Assigning data to a new structure
     s->id = id;
     snprintf(s->name, sizeof(s->name), "%s", name);
@@ -65,13 +73,18 @@ static void decBin(char *buffer,size_t size,int dig) {
 
 void printStudent(student* data) {
     if (data==NULL) {
-        printf("Empty struct.\n");
+        printf("Empty element.\n");
         return;
     }
 
     printf("Name Surname: %s\t", data->name);
     printf("%s. ", data->surname);
-    printf("Grade: %c. ", data->gradeOfStudent + 65 - 1);
+
+    if (data->gradeOfStudent == WITHOUT_GRADE) {
+        printf("Grade: WITHOUT_GRADE ");
+    }else {
+        printf("Grade: %c. ", data->gradeOfStudent + 65 - 1);
+    }
 
     if (data->contactOfStudent == EMAIL) {
         printf("Correspondence: %s. ", data->correspondence.eMail);
